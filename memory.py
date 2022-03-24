@@ -13,11 +13,15 @@ from random import *
 from turtle import *
 
 from freegames import path
+import turtle
 
 car = path('car.gif')
 tiles = list(range(32)) * 2
 state = {'mark': None}
 hide = [True] * 64
+nt = 0 #Se define la variable para el numbero de taps destapadas
+p = 0  #Se defina la variable para el numero de parejas descubiertas
+
 
 
 def square(x, y):
@@ -42,19 +46,27 @@ def xy(count):
     """Convert tiles count to (x, y) coordinates."""
     return (count % 8) * 50 - 200, (count // 8) * 50 - 200
 
-
-def tap(x, y):
+def tap(x, y,):
     """Update mark and hidden tiles based on tap."""
     spot = index(x, y)
     mark = state['mark']
-
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
+    
     else:
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+        global p #Variable global p
+        p += 1   #Sumarle 1 a p cada que se descubra una pareja
+    #number of taps...
+    global nt #Utilizar variable global
+    nt += 1   #Sumarle un 1 cada que se destapa la tapa
+    print("Taps opened: "+ str(nt)) #Imprimir la variable en pantalla
 
+    if p == 32:             #Condicion de que ya se destaparon todas las parejas
+        print("YOU WIN!!!") #Desplegar mensaje de victoria
+    
 
 def draw():
     """Draw image and tiles."""
@@ -62,30 +74,30 @@ def draw():
     goto(0, 0)
     shape(car)
     stamp()
-
+    global p
     for count in range(64):
         if hide[count]:
             x, y = xy(count)
             square(x, y)
-
+            
     mark = state['mark']
-
+    
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
         goto(x + 2, y)
         color('black')
         write(tiles[mark], font=('Arial', 30, 'normal'))
-
     update()
     ontimer(draw, 100)
-
-
+     
 shuffle(tiles)
 setup(420, 420, 370, 0)
 addshape(car)
 hideturtle()
 tracer(False)
+
 onscreenclick(tap)
+
 draw()
 done()
