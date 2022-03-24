@@ -16,12 +16,12 @@ from freegames import path
 import turtle
 
 car = path('car.gif')
-tiles = list(range(32)) * 2
+#tiles = list(range(32)) * 2 ##Quitamos la lista ya que creamos una distinta. 
 state = {'mark': None}
 hide = [True] * 64
 nt = 0 #Se define la variable para el numbero de taps destapadas
 p = 0  #Se defina la variable para el numero de parejas descubiertas
-
+lista = ['œ','æ','®','†','¥','u','π','å','∫','∂','ƒ','','™','¶','§','l','∑','©','√','ß','µ','|','@','#','¢','∞','8','≠','!','LL','DD','EE']*2 #Nueva lista creada con nuevos elementos. 
 
 
 def square(x, y):
@@ -50,7 +50,7 @@ def tap(x, y,):
     """Update mark and hidden tiles based on tap."""
     spot = index(x, y)
     mark = state['mark']
-    if mark is None or mark == spot or tiles[mark] != tiles[spot]:
+    if mark is None or mark == spot or lista[mark] != lista[spot]:
         state['mark'] = spot
     
     else:
@@ -85,13 +85,13 @@ def draw():
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-        goto(x + 2, y)
+        goto(x + 25, y+7) #Se puso x+25 y y +7 para centrar todavia mejor los elemtnos de la lista. 
         color('black')
-        write(tiles[mark], font=('Arial', 30, 'normal'))
+        write(lista[mark], font=('Arial', 30, 'normal'), align = "center")#Se puso un align para poder centrar
     update()
     ontimer(draw, 100)
      
-shuffle(tiles)
+shuffle(lista)
 setup(420, 420, 370, 0)
 addshape(car)
 hideturtle()
